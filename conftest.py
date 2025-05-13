@@ -1,5 +1,6 @@
 import base64
 import shutil
+import time
 from datetime import datetime
 
 import pytest
@@ -25,6 +26,7 @@ def context(browser):
         viewport={"width": 1500, "height": 1080}
     )
     yield context
+    time.sleep(3)
     context.close()
 
 
@@ -36,11 +38,35 @@ def page(context):
 
 
 @pytest.fixture
-def logged_in_page(page):
+def logged_in_page(page, request):
+    url = request.config.getoption("url")
     login_page = LoginPage(page)
-    login_page.goto("https://www.saucedemo.com/")
+    login_page.goto(url)
     login_page.login("standard_user", "secret_sauce")
     return page
+
+
+@pytest.fixture
+def without_login(page, request):
+    url = request.config.getoption("url")
+    login_page = LoginPage(page)
+    login_page.goto(url)
+    return page
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--browser_name", action="store", default="chrome", help="browser selection"
+    )
+    parser.addoption(
+        "--url", action="store", default="https://www.saucedemo.com/", help="Environment url"
+    )
+    parser.addoption(
+        "--username", action="store", default="standard_user", help="Environment url"
+    )
+    parser.addoption(
+        "--password", action="store", default="secret_sauce", help="Environment url"
+    )
 
 
 REPORT_DIR = "reports"

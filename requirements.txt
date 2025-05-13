@@ -2,3 +2,5 @@ pytest==8.3.5
 playwright==1.52.0
 pytest-html==4.1.1
 <other-packages>==<versions>
+requests==2.32.3
+pytest-xdist~=3.5.0
