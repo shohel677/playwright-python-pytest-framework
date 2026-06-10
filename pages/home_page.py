@@ -6,7 +6,7 @@ class HomePage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.single_product_page = SingleProductPage(page)
-        self.product = page.locator("//div[text()='Sauce Labs Backpack']/parent::a")
+        self.product = page.get_by_text("Sauce Labs Backpack")
 
     def get_title(self):
         title = self.page.title()
