@@ -2,7 +2,6 @@ import base64
 import shutil
 import time
 from datetime import datetime
-
 import pytest
 import pytest_html
 from playwright.sync_api import sync_playwright
@@ -99,10 +98,11 @@ def pytest_runtest_makereport(item, call):
 
             # Print path to console
             full_path = os.path.abspath(file_path)
-            print(f"\n📸 Screenshot saved: {full_path}")
+            print(f"\nScreenshot saved: {full_path}")
 
             # Embed in HTML report (if using self-contained)
             with open(file_path, "rb") as f:
                 encoded_img = base64.b64encode(f.read()).decode("utf-8")
             report.extras = getattr(report, "extras", [])
             report.extras.append(extras.image(encoded_img, mime_type="image/png"))
+
