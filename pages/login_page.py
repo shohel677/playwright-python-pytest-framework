@@ -1,6 +1,6 @@
 from pages.base_page import BasePage
-from components.button import Button
-from components.fill import Fill
+from tools.elements.button import Button
+from tools.elements.fill import Fill
 
 
 class LoginPage(BasePage):
@@ -8,7 +8,7 @@ class LoginPage(BasePage):
         super().__init__(page)
         self.username_input = Fill(page.locator("#user-name"), "Username field")
         self.password_input = Fill(page.locator("#password"), "Password field")
-        self.login_button = Button(page.get_by_role("button", name="Login"), "User name Field")
+        self.login_button = Button(page.get_by_role("button", name="Login"), "Login Button")
 
     def login(self, username, password):
         self.username_input.clear_fill(username)

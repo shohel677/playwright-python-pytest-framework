@@ -1,4 +1,4 @@
-from components.base_components import BaseComponent
+from tools.elements.base_components import BaseComponent
 
 
 class Button(BaseComponent):
