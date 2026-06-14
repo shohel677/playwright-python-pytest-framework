@@ -1,12 +1,13 @@
 from pages.base_page import BasePage
 from pages.single_product_page import SingleProductPage
+from tools.elements.label import Label
 
 
 class HomePage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.single_product_page = SingleProductPage(page)
-        self.product = page.get_by_text("Sauce Labs Backpack")
+        self.product = Label(page.get_by_text("Sauce Labs Backpack"), "Product header")
 
     def get_title(self):
         title = self.page.title()
@@ -19,5 +20,5 @@ class HomePage(BasePage):
         return self
 
     def open_a_product(self):
-        self.product.click()
+        self.product.single_click()
         return self.single_product_page
