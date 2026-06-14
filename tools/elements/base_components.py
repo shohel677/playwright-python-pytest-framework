@@ -18,8 +18,8 @@ class BaseComponent:
     def is_visible_assertion(self):
         self.logger.info(f"Checking visibility of: {self.name}")
         is_displayed = self.element.is_visible()
-        assert is_displayed
         self.logger.info(f"{self.name}  is visible:  {is_displayed}")
+        assert is_displayed
 
     def get_wrapped_element(self):
         self.logger.info(f"Wrapped element: {self.name}")
