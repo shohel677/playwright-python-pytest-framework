@@ -7,6 +7,6 @@ class CartPage(BasePage):
         super().__init__(page)
         self.product_details = Label(page.get_by_text("Sauce Labs Backpack"), "Product header")
 
-    def product_visibility(self):
-        self.product_details.is_visible_assertion()
+    async def product_visibility(self):
+        await self.product_details.is_visible_assertion()
         return self

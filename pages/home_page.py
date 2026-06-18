@@ -9,16 +9,16 @@ class HomePage(BasePage):
         self.single_product_page = SingleProductPage(page)
         self.product = Label(page.get_by_text("Sauce Labs Backpack"), "Product header")
 
-    def get_title(self):
-        title = self.page.title()
+    async def get_title(self):
+        title = await self.page.title()
         assert "Swag Labs" in title
         return self
 
-    def get_curr_url(self):
+    async def get_curr_url(self):
         current_url = self.page.url
         assert "https://www.saucedemo.com/inventory.html" in current_url
         return self
 
-    def open_a_product(self):
-        self.product.single_click()
+    async def open_a_product(self):
+        await self.product.single_click()
         return self.single_product_page

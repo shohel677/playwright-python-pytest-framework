@@ -10,7 +10,7 @@ class LoginPage(BasePage):
         self.password_input = Fill(page.locator("#password"), "Password field")
         self.login_button = Button(page.get_by_role("button", name="Login"), "Login Button")
 
-    def login(self, username, password):
-        self.username_input.clear_fill(username)
-        self.password_input.clear_fill(password)
-        self.login_button.single_click()
+    async def login(self, username, password):
+        await self.username_input.clear_fill(username)
+        await self.password_input.clear_fill(password)
+        await self.login_button.single_click()
