@@ -29,3 +29,12 @@ class BaseComponent:
         self.logger.info(f"Expecting text {text} for : {self.name}")
         await expect(self.element).to_have_text(text)
         self.logger.info(f"Expected text {text} for : {self.name} is present")
+
+    async def expect_to_be_visible(self):
+        self.logger.info(f"Expecting element to be visible : {self.name}")
+        is_visible = await expect(self.element).to_be_visible()
+        self.logger.info(f"Expected element visible : {is_visible} ")
+
+    async def mouse_hover(self):
+        self.logger.info(f"Hovering : {self.name}")
+        await self.element.hover()

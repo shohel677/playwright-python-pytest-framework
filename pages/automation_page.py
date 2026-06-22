@@ -1,31 +1,36 @@
 from pages.base_page import BasePage
 from playwright.async_api import Dialog, expect
 
+from tools.elements.button import Button
+from tools.elements.fill import Fill
+from tools.elements.label import Label
+from tools.elements.radio_button import CheckButton
+
 
 class AutomationPage(BasePage):
 
     def __init__(self, page):
         super().__init__(page)
-        self.radioButton = page.locator("input[value='radio2']")
-        self.suggestiveInput = page.get_by_placeholder("Type to Select Countries")
-        self.option = page.get_by_text("Bangladesh")
+        self.radioButton = CheckButton(page.locator("input[value='radio2']"), "Radio button")
+        self.suggestiveInput = Fill(page.get_by_placeholder("Type to Select Countries"), "Suggestive country dropdown")
+        self.option = Button(page.get_by_text("Bangladesh"), "Suggestive option")
         self.alertInput = page.locator("#name")
         self.alertBtn = page.locator("#alertbtn")
         self.confirmBtn = page.locator("#confirmbtn")
-        self.mouseHoverBtn = page.get_by_role("button", name="Mouse Hover")
-        self.reloadLink = page.get_by_text("Reload")
+        self.mouseHoverBtn = Button(page.get_by_role("button", name="Mouse Hover"), "Mouse Hover Button")
+        self.reloadLink = Button(page.get_by_text("Reload"), "Reload Button")
         self.iframe = page.frame_locator("iframe#courses-iframe")
         self.dropdown = page.locator("#dropdown-class-example")
-        self.open_window_btn = page.locator("#openwindow")
-        self.open_tab_btn = page.locator("#opentab")
+        self.open_window_btn = Button(page.locator("#openwindow"), "Open new window button")
+        self.open_tab_btn = Button(page.locator("#opentab"), "Open new tab button")
 
     async def check_radio_button(self):
-        await self.radioButton.check()
-        assert await self.radioButton.is_checked()
+        await self.radioButton.button_check()
+        await self.radioButton.is_button_check()
 
     async def suggestive_dropdown(self):
-        await self.suggestiveInput.type("Bangladesh")
-        input_val = await self.suggestiveInput.input_value()
+        await self.suggestiveInput.clear_fill("Bangladesh")
+        input_val = await self.suggestiveInput.get_wrapped_element().input_value()
         assert input_val == "Bangladesh", f"Expected 'Bangladesh', but got '{input_val}'"
 
     async def handle_alert(self):
@@ -54,9 +59,9 @@ class AutomationPage(BasePage):
         await self.confirmBtn.click()
 
     async def mouse_hover_and_click_reload(self):
-        await self.mouseHoverBtn.hover()
-        await expect(self.reloadLink).to_be_visible()
-        await self.reloadLink.click()
+        await self.mouseHoverBtn.mouse_hover()
+        await self.reloadLink.expect_to_be_visible()
+        await self.reloadLink.single_click()
 
     async def verify_logo_in_iframe(self):
         logo = self.iframe.locator("div.pull-left.logo-outer img[src='assets/images/rs_logo.png']")
@@ -69,26 +74,24 @@ class AutomationPage(BasePage):
 
     async def handle_new_window_and_validate_logo(self):
         async with self.page.context.expect_page() as new_page_info:
-            await self.open_window_btn.click()
+            await self.open_window_btn.single_click()
 
         new_page = await new_page_info.value
         await new_page.wait_for_load_state()
 
-        logo = new_page.locator("img[alt='Logo']")
-        await expect(logo).to_be_visible()
-        print("Logo is visible in the new window.")
+        logo = Label(new_page.locator("img[alt='Logo']"), "Logo")
+        await logo.expect_to_be_visible()
         await new_page.close()
-        await expect(self.open_window_btn).to_be_visible()
+        await self.open_window_btn.expect_to_be_visible()
 
     async def handle_new_tab_and_validate_logo(self):
         async with self.page.context.expect_page() as new_page_info:
-            await self.open_tab_btn.click()
+            await self.open_tab_btn.single_click()
 
         new_page = await new_page_info.value
         await new_page.wait_for_load_state()
 
-        logo = new_page.locator("img[alt='Logo']")
-        await expect(logo).to_be_visible()
-        print("Logo is visible in the new tab.")
+        logo = Label(new_page.locator("img[alt='Logo']"), "Logo")
+        await logo.expect_to_be_visible()
         await new_page.close()
-        await expect(self.open_window_btn).to_be_visible()
+        await self.open_tab_btn.expect_to_be_visible()
